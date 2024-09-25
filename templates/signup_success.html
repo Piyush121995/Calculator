@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            text-align: center;
+            overflow: hidden;
+            margin: 0;
+        }
+        #vanta{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .content {
+            position: relative;
+            z-index: 1; /* Bring content in front of the background */
+            text-align: center;
+            padding: 50px;
+        }
+        h2 {
+            color: #4CAF50; /* Green color for success message */
+        }
+        .alert {
+            background-color: #e7f3fe;
+            color: #31708f;
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #31708f;
+            border-radius: 5px;
+        }
+        .graphic {
+            position: relative;
+            margin: 20px auto;
+            width: 300px; /* Adjust the width as needed */
+            height: 100px; /* Adjust the height as needed */
+            overflow: hidden;
+        }
+        .car {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            animation: drive 5s forwards;
+        }
+        .destination {
+            position: absolute;
+            right: 0;
+            bottom: 10px;
+            width: 30px; /* Size of the destination marker */
+            height: 30px; /* Size of the destination marker */
+            background-color: #FF5733; /* Destination marker color */
+            border-radius: 50%; /* Make it circular */
+        }
+        @keyframes drive {
+            0% { left: 0; }
+            100% { left: calc(100% - 50px); } /* Adjust based on car width */
+        }
+        img {
+            width: 150px; /* Size of the car image */
+            height: 100px;
+        }
+        p {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+<div id="vanta"></div> <!-- Vanta effect element -->
+<div class="content">
+    <h2>Signup Successful!</h2>
+
+    <div class="graphic">
+        <img class="car" src="{% static 'images/movingcar.png' %}" alt="Car Icon"> <!-- Replace with your car graphic URL -->
+        <div class="destination"></div>
+    </div>
+
+    {% if messages %}
+        <div class="alert">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <p>You will be redirected to the login page shortly.</p>
+</div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.21/vanta.birds.min.js"></script>
+    <script>
+        
+        VANTA.BIRDS({
+    el: "#vanta", // Correct ID
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.00,
+    minWidth: 200.00,
+    scale: 1.00,
+    scaleMobile: 1.00
+});
+        // Redirect to the login page after 3 seconds
+        setTimeout(function() {
+            window.location.href = "{% url 'login' %}";  // Redirect to the login URL
+        }, 5000);
+    </script>
+</body>
+</html>
