@@ -10,6 +10,12 @@ from django.contrib.auth.models import User
 from django import forms
 from .import forms
 from calculator.forms import SignupForm
+from rest_framework import generics
+from .serializers import UserSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 
 import re
 import logging
@@ -46,6 +52,26 @@ def calculate(request):
         return render(request, 'design.html', {'result': result, 'expression': expression})
 
     return render(request, 'design.html')
+
+@csrf_exempt
+@api_view(['POST'])
+def api_calculate(request):
+    expression = request.data.get('expression', '')
+    result = calculate_expression(expression)
+    return Response({"expression": expression, "result": result})
+
+class UserListCreateApiView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(password=make_password(serializer.validated_data['password']))
+
+class UserRetrieveUpdateDestroyApiView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'username'
+    permission_classes = (IsAuthenticated,)
 
 
 #login Functionality
