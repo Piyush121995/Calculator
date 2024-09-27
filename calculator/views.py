@@ -11,10 +11,13 @@ from django import forms
 from .import forms
 from calculator.forms import SignupForm
 from rest_framework import generics
+
+from .models import UserCalculationHistory
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from .import models
 
 import re
 import logging
@@ -45,28 +48,29 @@ def calculate_expression(expression):
 @csrf_exempt
 @login_required(login_url='login')
 def calculate(request):
-    if 'history' not in request.session:
-        request.session['history'] = []
+    user=request.user
+    history = UserCalculationHistory.objects.filter(user=request.user).order_by('-Created_at')[:10]
     result = None
+    expression=''
     if request.method == 'POST':
         expression = request.POST.get('expression', '')
         try:
             result = calculate_expression(expression)
-            history_entry = f"{expression} = {result}"
+            UserCalculationHistory.objects.create(
+                user=user,
+                expression=expression,
+                result=result
+            )
+            history = UserCalculationHistory.objects.filter(user=user).order_by('-Created_at')[:10]
         except Exception as e:
             # Handle errors in expression calculation
-            history_entry = f"Error calculating {expression}: {str(e)}"
+            result = f"Error calculating {expression}: {str(e)}"
 
-        history = request.session['history']
-        history.append(history_entry)
-        if len(history) > 10:
-            history.pop(0)
 
-        request.session['history'] = history
 
-        return render(request, 'design.html', {'result': result, 'expression': expression,'history': request.session['history']})
+    return render(request, 'design.html', {'result': result, 'expression': expression,'history': history})
 
-    return render(request, 'design.html')
+
 
 def logout_view(request):
     logout(request)
@@ -105,11 +109,12 @@ def login_page(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            # history = UserCalculationHistory.objects.filter(user=user).order_by('-Created_at')[:10]
             return redirect('calculator')
         else:
             messages.error(request, 'Invalid username or password.')
 
-    return render(request,'login.html')
+    return render(request,'login.html'  )
 
 def sign_up(request):
     if request.method == 'POST':

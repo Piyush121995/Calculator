@@ -185,7 +185,9 @@
         <h3>Calculation History:</h3>
         <ul>
             {% for entry in history %}
-                <li>{{ entry }}</li>
+                <li>{{ entry.expression }}={{ entry.result }}  ({{ entry.Created_at }})</li>
+                {% empty %} 
+                <li>No calculation history available.</li>
             {% endfor %}
         </ul>
     </div>
@@ -193,7 +195,7 @@
     <div class="calculator">
         <form method="POST">
             {% csrf_token %}
-            <input type="text" id="display" name="expression" value="{{ expression }}" placeholder="Enter Values" required>
+            <label for="display"></label><input type="text" id="display" name="expression" value="{{ expression }}" placeholder="Enter Values" required>
             <button type="submit">=</button>
         </form>
         <div>
