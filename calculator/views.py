@@ -16,7 +16,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-
 import re
 import logging
 logger = logging.getLogger(__name__)
@@ -25,33 +24,53 @@ logger = logging.getLogger(__name__)
 # Your existing calculator functions
 import re
 
-
-# Safely evaluate the expression using eval after cleaning input
 def calculate_expression(expression):
     try:
         # Clean the expression (e.g., remove invalid characters)
-        expression = re.sub(r'[^0-9+\-*/().%]', '', expression)
+        expression = re.sub(r'[^0-9+\-*/().%^]', '', expression)
+        expression = expression.replace('^', '**')
 
-        # Evaluate the expression
+        # Evaluate the expression using sympy
         result = eval(expression)
 
         return result
     except ZeroDivisionError:
         return "Error: Division by zero is not allowed."
+    except SyntaxError:
+        return "Error: Invalid expression."
     except Exception as e:
-        return f"Error: Invalid expression. {str(e)}"
-
+        return f"Error: {str(e)}"
 
 # View to render the HTML form and handle the calculation
 @csrf_exempt
 @login_required(login_url='login')
 def calculate(request):
+    if 'history' not in request.session:
+        request.session['history'] = []
+    result = None
     if request.method == 'POST':
         expression = request.POST.get('expression', '')
-        result = calculate_expression(expression)
-        return render(request, 'design.html', {'result': result, 'expression': expression})
+        try:
+            result = calculate_expression(expression)
+            history_entry = f"{expression} = {result}"
+        except Exception as e:
+            # Handle errors in expression calculation
+            history_entry = f"Error calculating {expression}: {str(e)}"
+
+        history = request.session['history']
+        history.append(history_entry)
+        if len(history) > 10:
+            history.pop(0)
+
+        request.session['history'] = history
+
+        return render(request, 'design.html', {'result': result, 'expression': expression,'history': request.session['history']})
 
     return render(request, 'design.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
 
 @csrf_exempt
 @api_view(['POST'])
@@ -70,8 +89,12 @@ class UserListCreateApiView(generics.ListCreateAPIView):
 class UserRetrieveUpdateDestroyApiView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_field = 'username'
-    permission_classes = (IsAuthenticated,)
+    # lookup_field = 'id'
+    # permission_classes = []
+
+    # def get_object(self):
+    #     id = self.kwargs.get('id')  # get 'username' from the URL
+    #     return User.objects.get(id=id)
 
 
 #login Functionality

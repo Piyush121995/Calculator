@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gobolt Calci</title>
     <style>
-
         html, body {
             height: 100%;
             margin: 0;
@@ -17,7 +16,7 @@
             text-align: center;
             font-family: Arial, sans-serif;
             position: relative;
-            background-color: white; 
+            background-color: white;
         }
 
         /* Calculator Styles */
@@ -26,9 +25,9 @@
             border: 50px solid #ccc;
             padding: 50px;
             background-color: Orange;
-            z-index: 10; /* Stay above the background */
+            z-index: 10;
             position: relative;
-            margin-top: 100px; /* Adds some spacing from the top */
+            margin-top: 100px;
         }
 
         .calculator input {
@@ -48,11 +47,10 @@
             margin: 1%;
             background-color: white;
         }
-        
+
         .calculator button:hover {
             background-color: #218838;
         }
-
 
         .calculator-image {
             width: 250px;
@@ -63,7 +61,6 @@
             z-index: 10;
         }
 
-
         #vanta-bg {
             position: absolute;
             top: 0;
@@ -72,48 +69,91 @@
             height: 100%;
             z-index: -1;
         }
+
         .Title {
-               font-size: 2.5em;          
-               color: #FFA500;              
-               text-align: center;       
-               margin: 20px 0;          
-               font-family: 'Arial', sans-serif; 
-               text-transform: uppercase; 
-               letter-spacing: 1px;
-               border-right: 4px solid black; /* Cursor effect */
-               animation: blink 0.75s step-end infinite; /* Blinking cursor */
+            font-size: 2.5em;
+            color: #FFA500;
+            text-align: center;
+            margin: 20px 0;
+            font-family: 'Arial', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-right: 4px solid black;
+            animation: blink 0.75s step-end infinite;
         }
+
         @keyframes blink {
-    50% {
-        border-color: transparent; /* Blink effect */
-    }
-}
+            50% {
+                border-color: transparent;
+            }
+        }
+
         .logout-button {
-    position: absolute;
-    top: 40px; /* Adjust this value for vertical positioning */
-    right: 70px; /* Adjust this value to move it right outside the calculator */
-    background-color: #FF5733; /* Logout button color */
-    color: white;
-    border: none;
-    padding: 8px 16px; /* Medium size */
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
+            position: absolute;
+            top: 40px;
+            right: 70px;
+            background-color: #FF5733;
+            color: black;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
         .logout-button:hover {
-            background-color: #c0392b; /* Darker shade on hover */
+            background-color: #c0392b;
         }
 
+        .hamburger {
+            position: absolute;
+            top: 90px;
+            right: 50px;
+            background-color: yellowgreen;
+            color: black;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
+        .hamburger:hover {
+            background-color: yellow;
+        }
+
+        .history {
+            display: none;
+            position: fixed;
+            right: 0;
+            top: 190px;
+            width: 250px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color:greenyellow;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .history ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .history li {
+            margin: 5px 0;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
-    <div id="vanta-bg"></div> <!-- Background container -->
+    <div id="vanta-bg"></div>
 
     <h1 class="Title" id="typing-effect"></h1>
     <script>
-        const text = "Calculator"; // Text to type
+        const text = "Calculator"; 
         const typingElement = document.getElementById("typing-effect");
         let index = 0;
 
@@ -121,15 +161,33 @@
             if (index < text.length) {
                 typingElement.textContent += text.charAt(index);
                 index++;
-                setTimeout(type, 100); // Adjust typing speed (milliseconds)
+                setTimeout(type, 100);
             }
         }
 
-        type(); // Start typing effect
+        type(); 
     </script>
     <img src="{% static 'images/GoBOLT1.png' %}" class="calculator-image">
+    
     <div>
-    <button class="logout-button" onclick="window.location.href='{% url 'login' %}'">Log Out</button>
+        <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Log Out</button>
+    </div>
+
+    <script>
+        if (!{{ user.is_authenticated|yesno:"true,false" }}) {
+            window.location.href = '/login/';
+        }
+    </script>
+    
+    <button class="hamburger" onclick="toggleHistory()">☰ Show History</button>
+
+    <div class="history" id="historyDiv">
+        <h3>Calculation History:</h3>
+        <ul>
+            {% for entry in history %}
+                <li>{{ entry }}</li>
+            {% endfor %}
+        </ul>
     </div>
 
     <div class="calculator">
@@ -143,24 +201,32 @@
                 <h3>Result: {{ result }}</h3>
             {% endif %}
         </div>
-    
+    </div>
 
     <!-- Include Vanta.js and Three.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.21/vanta.birds.min.js"></script>
 
     <script>
-      VANTA.BIRDS({
-    el: "#vanta-bg", // Correct ID
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.00,
-    minWidth: 200.00,
-    scale: 1.00,
-    scaleMobile: 1.00
-});
+        function toggleHistory() {
+            const historyDiv = document.getElementById("historyDiv");
+            if (historyDiv.style.display === "none" || historyDiv.style.display === "") {
+                historyDiv.style.display = "block"; 
+            } else {
+                historyDiv.style.display = "none"; 
+            }
+        }
+
+        VANTA.BIRDS({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00
+        });
     </script>
-    </div>
 </body>
 </html>
