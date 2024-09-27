@@ -21,3 +21,7 @@ class SignupForm(UserCreationForm):
         return cleaned_data
 
 
+
+class UploadForm(forms.Form):
+    file = forms.FileField(label='Upload a file with expressions', required=True)  # required=True is default
+

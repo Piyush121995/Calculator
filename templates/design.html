@@ -146,6 +146,42 @@
             margin: 5px 0;
             text-align: left;
         }
+
+
+        /* .upload-form {
+            /* margin-top: 20px;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+
+            /* display: inline-block; */
+            /* border: 50px solid #ccc; */
+            /* padding: 50px; */
+            /* background-color: Orange; */
+            /* z-index: 10;
+            position: relative;
+            margin-top: 100px; */ 
+        /* }  */
+
+        .upload-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 16px;
+            z-index: 10;
+            position: relative;
+            bottom: -5px;
+        }
+
+        .upload-button:hover{
+            background-color: pink;
+        }
+        
+        
     </style>
 </head>
 <body>
@@ -192,6 +228,9 @@
         </ul>
     </div>
 
+   
+
+
     <div class="calculator">
         <form method="POST">
             {% csrf_token %}
@@ -204,6 +243,25 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- <div class="upload-form">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'upload' %}">
+            {% csrf_token %}
+            <input type="file" name="file" accept=".txt" required>
+            <button type="submit" class="upload-button">Upload File</button>
+        </form>
+    </div> -->
+    <div class="upload-form">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'upload' %}">
+            {% csrf_token %}
+            <input type="file" name="file" accept=".txt" required style="display: none;" id="file-input">
+            <label for="file-input" class="upload-button">Upload File</label>
+
+            <button type="submit" class="upload-button">Submit</button>
+        </form>
+    </div>
+
+
 
     <!-- Include Vanta.js and Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>

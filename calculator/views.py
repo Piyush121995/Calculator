@@ -23,7 +23,10 @@ import re
 import logging
 logger = logging.getLogger(__name__)
 
+from .forms import UploadForm
+import os
 
+from django.utils.encoding import smart_str
 # Your existing calculator functions
 import re
 
@@ -131,5 +134,51 @@ def sign_up(request):
 def signup_success(request):
     return render(request, 'signup_success.html')
 
+def upload_file_check(file):
+    result_line=[]
+    for line in file:
+        expression=line.decode('utf-8').strip()
+        try:
+            result = eval(expression)
+            result_line.append (f"{expression}={result}\n")
+        except Exception as e:
+            result_line.append(f"{expression}= 'Invalid data'\n")
+    result_file_path = 'output/results.txt'
+    os.makedirs(os.path.dirname(result_file_path), exist_ok=True)
+    with open(result_file_path, 'w') as result_file:
+        result_file.writelines(result_line)
+
+    return result_file_path
 
 
+def upload_file_view(request):
+    if request.method == 'POST':
+        # Initialize the form with POST data and uploaded files
+        form = UploadForm(request.POST, request.FILES)
+
+        # Debugging: Log form data and files
+        print("POST Data:", request.POST)  # Check what is being submitted
+        print("FILES Data:", request.FILES)  # Check the uploaded file
+
+        if form.is_valid():
+            uploaded_file = request.FILES['file']  # Access the file from the form
+            file_name, file_extension = os.path.splitext(uploaded_file.name)
+
+            # Check if the uploaded file is a .txt file
+            if file_extension.lower() == '.txt':
+                uploaded_file.seek(0)  # Ensure you're at the beginning of the file
+                result_file_path = upload_file_check(uploaded_file)  # Your function to process the file
+
+                with open(result_file_path, 'r') as result_file:
+                    response = HttpResponse(result_file.read(), content_type='text/plain')
+                    response['Content-Disposition'] = 'attachment; filename="results.txt"'
+                    return response
+            else:
+                return HttpResponse("Invalid file format. Only .txt files are supported.")
+        else:
+            print("Form errors:", form.errors)  # Print any form validation errors
+            return HttpResponse("Invalid form submission. Please check your input.")
+    else:
+        form = UploadForm()  # Create a new instance of the form for GET requests
+
+    return render(request, 'design.html', {'form': form})
