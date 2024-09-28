@@ -13,7 +13,7 @@ from calculator.forms import SignupForm
 from rest_framework import generics
 
 from .models import UserCalculationHistory
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserCalculationHistorySerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -94,12 +94,31 @@ class UserListCreateApiView(generics.ListCreateAPIView):
 class UserRetrieveUpdateDestroyApiView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # lookup_field = 'id'
-    # permission_classes = []
+    lookup_field = 'id'
+    permission_classes = []
 
-    # def get_object(self):
-    #     id = self.kwargs.get('id')  # get 'username' from the URL
-    #     return User.objects.get(id=id)
+    def get_object(self):
+        id = self.kwargs.get('id')  # get 'username' from the URL
+        return User.objects.get(id=id)
+
+class HistoryListView(generics.ListCreateAPIView):
+    queryset = UserCalculationHistory.objects.all()
+    serializer_class = UserCalculationHistorySerializer
+
+class HistoryCRUDView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserCalculationHistorySerializer
+    lookup_field = 'user'
+
+    def get_queryset(self):
+        user_id=self.kwargs.get('user')
+        return UserCalculationHistory.objects.filter(user_id=user_id).order_by('-Created_at')
+
+    def get_object(self):
+        # This method retrieves a single history object for the user
+        queryset = self.get_queryset()
+        obj = queryset.get(id=self.kwargs['id'])  # Get specific entry based on ID
+        return obj
+
 
 
 #login Functionality
