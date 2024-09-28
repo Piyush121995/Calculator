@@ -7,10 +7,12 @@
     <title>Gobolt Calci</title>
     <style>
         html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+    height: 100vh; /* Full viewport height */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensures padding and borders are included in the total width and height */
+}
+
 
         body {
             text-align: center;
@@ -21,45 +23,50 @@
 
         /* Calculator Styles */
         .calculator {
-            display: inline-block;
-            border: 50px solid #ccc;
-            padding: 50px;
-            background-color: Orange;
-            z-index: 10;
-            position: relative;
-            margin-top: 100px;
-        }
+    display: inline-block;
+    border: 5vw solid #ccc; /* Border size responsive to viewport width */
+    padding: 5vw; /* Padding adjusted to be responsive */
+    background-color: Orange;
+    z-index: 10;
+    position: relative;
+    margin-top: 10vh; /* Margin top responsive to viewport height */
+    width: 50%; /* Width set to 80% of the parent container for better responsiveness */
+    max-width: 90vw; /* Ensures the calculator doesn't exceed 90% of the viewport width */
+}
 
         .calculator input {
-            display: inline-block;
-            width: 90%;
-            margin-bottom: 10px;
-            text-align: center;
-            padding: 10px;
-            font-size: 20px;
-            background-color: antiquewhite;
-        }
+    display: inline-block;
+    width: 90%; /* Stays in percentage, responsive */
+    margin-bottom: 2%; /* Responsive margin */
+    text-align: center;
+    padding: 2vw; /* Responsive padding using viewport width */
+    font-size: 2vw; /* Responsive font-size using viewport width */
+    background-color: antiquewhite;
+}
+
 
         .calculator button {
-            width: 30%;
-            padding: 20px;
-            font-size: 30px;
-            margin: 1%;
-            background-color: white;
-        }
+    width: 30%; /* Button width as a percentage of its container */
+    padding: 2vw; /* Padding is now relative to viewport width */
+    font-size: 2vw; /* Font size is now responsive */
+    margin: 1%; /* Margin is already in percentage */
+    background-color: white;
+}
+
 
         .calculator button:hover {
             background-color: #218838;
         }
 
         .calculator-image {
-            width: 250px;
-            height: 100px;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 10;
-        }
+              width: 20%; /* Adjust as needed */
+              height: auto; /* Maintain aspect ratio */
+              position: absolute;
+              top: 5%; /* Adjust positioning as needed */
+              left: 5%;
+             z-index: 10;
+}
+
 
         #vanta-bg {
             position: absolute;
@@ -71,16 +78,18 @@
         }
 
         .Title {
-            font-size: 2.5em;
-            color: #FFA500;
-            text-align: center;
-            margin: 20px 0;
-            font-family: 'Arial', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-right: 4px solid black;
-            animation: blink 0.75s step-end infinite;
-        }
+    font-size: 5vw;
+    color: #FFA500;
+    text-align: center;
+    margin: 5% 0; 
+    font-family: 'Arial', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5vw; 
+    border-right: 0.3vw solid black; 
+    animation: blink 0.75s step-end infinite;
+    z-index: -1;
+}
+
 
         @keyframes blink {
             50% {
@@ -89,54 +98,53 @@
         }
 
         .logout-button {
-            position: absolute;
-            top: 40px;
-            right: 70px;
-            background-color: #FF5733;
-            color: black;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+    position: absolute;
+    top: 5vh; /* Responsive to viewport height */
+    right: 5vw; /* Responsive to viewport width */
+    background-color: #FF5733;
+    color: black;
+    border: none;
+    padding: 1vh 2vw; /* Responsive padding */
+    border-radius: 0.5em;
+    cursor: pointer;
+    font-size: 1.5vw; /* Responsive font size */
+}
 
         .logout-button:hover {
             background-color: #c0392b;
         }
 
         .hamburger {
-            position: absolute;
-            top: 90px;
-            right: 50px;
-            background-color: yellowgreen;
-            color: black;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+    position: absolute;
+    top: 10vh; /* Adjusted to viewport height */
+    right: 5vw;
+    background-color: yellowgreen;
+    color: black;
+    border: none;
+    padding: 1vh 2vw;
+    border-radius: 0.5em;
+    cursor: pointer;
+    font-size: 1.5vw; /* Responsive font size */
+}
 
         .hamburger:hover {
             background-color: yellow;
         }
 
         .history {
-            display: none;
-            position: fixed;
-            right: 0;
-            top: 190px;
-            width: 250px;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            background-color:greenyellow;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
+    display: none;
+    position: fixed;
+    right: 0;
+    top: 20vh; /* More flexible relative to viewport height */
+    width: 30vw; /* Width based on viewport */
+    max-height: 30vh; /* Max height relative to viewport */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 2vh 2vw; /* Responsive padding */
+    background-color: greenyellow;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
         .history ul {
             list-style-type: none;
             padding: 0;
@@ -165,17 +173,17 @@
         /* }  */
 
         .upload-button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: black;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-            font-size: 16px;
-            z-index: 10;
-            position: relative;
-            bottom: -5px;
-        }
+    padding: 1vh 2vw; /* Responsive padding */
+    background-color: #4CAF50;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 1em;
+    font-size: 1.5vw; /* Responsive font size */
+    z-index: 10;
+    position: relative;
+    bottom: -0.5vh; /* Adjusted bottom margin */
+}
 
         .upload-button:hover{
             background-color: pink;
@@ -189,13 +197,14 @@
 
     <h1 class="Title" id="typing-effect"></h1>
     <script>
-        const text = "Calculator"; 
+        const username = "{{ username }}"; 
+        const welcomeText= 'welcome, {{ username }}!';
         const typingElement = document.getElementById("typing-effect");
         let index = 0;
 
         function type() {
-            if (index < text.length) {
-                typingElement.textContent += text.charAt(index);
+            if (index < welcomeText.length) {
+                typingElement.textContent += welcomeText.charAt(index);
                 index++;
                 setTimeout(type, 100);
             }

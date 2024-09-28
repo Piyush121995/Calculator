@@ -13,43 +13,46 @@
             justify-content: flex-end;
             align-items: center;
             height: 100vh;
+            margin: 0; /* Reset margin */
         }
 
         .signup-container {
-    width: 400px; /* Set width for the signup form */
-    height:min-content;
-    right: 100px;
-    padding: 20px; /* Add padding around the form */
-    background: Orange; /* Background color for the form */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    margin-top: 50px; /* Space from the top */
-    border-radius: 5px; /* Rounded corners */
-}
+            width: 90%; /* Set responsive width */
+            max-width: 400px; /* Maximum width */
+            padding: 5%; /* Padding around the form */
+            background: orange; /* Background color for the form */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            margin-top: 5vh; /* Space from the top */
+            border-radius: 5px; /* Rounded corners */
+            position: relative; /* For positioning */
+        }
 
         .signup-container input {
             width: 90%;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 2vh; /* Responsive padding */
+            margin: 1vh 0; /* Responsive margin */
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 1.2em; /* Responsive font size */
         }
 
         .signup-container button {
             width: 100%;
-            padding: 10px;
+            padding: 2vh; /* Responsive padding */
             background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 1.2em; /* Responsive font size */
         }
 
         #vanta-bg {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
             z-index: -1;
         }
 
@@ -59,22 +62,25 @@
 
         h2 {
             text-align: center;
-            margin-bottom: 20px;
+            font-size: 2.5em; /* Responsive font size */
+            margin-bottom: 2vh; /* Responsive margin */
         }
 
         .calculator-image {
             display: flex;
             margin: 0 auto;
-            width: 300px; /* Adjust width if necessary */
-            height: 100px;
+            width: 80%; /* Responsive width */
+            max-width: 300px; /* Maximum width */
+            height: auto; /* Maintain aspect ratio */
         }
 
         .alert {
-            margin-bottom: 10px;
-            padding: 10px;
+            margin-bottom: 2vh; /* Responsive margin */
+            padding: 2vh; /* Responsive padding */
             border-radius: 5px;
             color: #fff;
             background-color: #28a745; /* Green background */
+            font-size: 1.2em; /* Responsive font size */
         }
     </style>
 </head>
@@ -89,15 +95,13 @@
                 <div class="alert">{{ message }}</div>
             {% endfor %}
         {% endif %}
-         <script>
-    </script>
+        
         <form method="POST">
-
             {% csrf_token %}
             {{form.as_p}}
             <button type="submit">Sign Up</button>
         </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+        <p style="font-size: 1.2em;">Already have an account? <a href="{% url 'login' %}">Log In</a></p>
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>

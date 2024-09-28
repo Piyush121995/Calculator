@@ -12,64 +12,82 @@
             text-align: center;
             overflow: hidden;
             margin: 0;
+            height: 100vh;
         }
-        #vanta{
+
+        #vanta {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             z-index: -1;
         }
+
         .content {
             position: relative;
-            z-index: 1; /* Bring content in front of the background */
+            z-index: 1;
             text-align: center;
-            padding: 50px;
+            padding: 5%;
+            width: 90vw;
+            max-width: 100vw;
+            margin: 0 auto;
         }
+
         h2 {
-            color: #4CAF50; /* Green color for success message */
+            color: #4CAF50;
+            font-size: 5vw; /* Use vw for responsive text size */
+            margin-bottom: 2vh; /* Margin adjusted using vh */
         }
+
         .alert {
             background-color: #e7f3fe;
             color: #31708f;
-            padding: 15px;
-            margin: 20px 0;
-            border: 1px solid #31708f;
-            border-radius: 5px;
+            padding: 2vh 1vw;
+            margin: 2vh 0;
+            border: 0.1vw solid #31708f;
+            border-radius: 1vw;
+            font-size: 2.5vw; /* Use vw for responsive font size */
         }
+
         .graphic {
             position: relative;
-            margin: 20px auto;
-            width: 300px; /* Adjust the width as needed */
-            height: 100px; /* Adjust the height as needed */
+            margin: 5vh auto;
+            width: 80vw;
+            height: 20vh;
             overflow: hidden;
         }
+
         .car {
             position: absolute;
             bottom: 0;
             left: 0;
             animation: drive 5s forwards;
         }
+
         .destination {
             position: absolute;
             right: 0;
-            bottom: 10px;
-            width: 30px; /* Size of the destination marker */
-            height: 30px; /* Size of the destination marker */
-            background-color: #FF5733; /* Destination marker color */
-            border-radius: 50%; /* Make it circular */
+            bottom: 2vh;
+            width: 5vw;
+            height: 5vw;
+            background-color: #FF5733;
+            border-radius: 50%;
         }
+
         @keyframes drive {
             0% { left: 0; }
-            100% { left: calc(100% - 50px); } /* Adjust based on car width */
+            100% { left: calc(100% - 10vw); } /* Adjust based on car width */
         }
-        img {
-            width: 150px; /* Size of the car image */
-            height: 100px;
+
+        img.car {
+            width: 20vw;
+            height: auto;
         }
+
         p {
-            font-size: 1.2em;
+            font-size: 2.5vw;
+            margin-top: 2vh;
         }
     </style>
 </head>
@@ -79,7 +97,7 @@
     <h2>Signup Successful!</h2>
 
     <div class="graphic">
-        <img class="car" src="{% static 'images/movingcar.png' %}" alt="Car Icon"> <!-- Replace with your car graphic URL -->
+        <img class="car" src="{% static 'images/movingcar.png' %}" alt="Car Icon">
         <div class="destination"></div>
     </div>
 
@@ -93,24 +111,26 @@
 
     <p>You will be redirected to the login page shortly.</p>
 </div>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.21/vanta.birds.min.js"></script>
-    <script>
-        
-        VANTA.BIRDS({
-    el: "#vanta", // Correct ID
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.00,
-    minWidth: 200.00,
-    scale: 1.00,
-    scaleMobile: 1.00
-});
-        // Redirect to the login page after 3 seconds
-        setTimeout(function() {
-            window.location.href = "{% url 'login' %}";  // Redirect to the login URL
-        }, 5000);
-    </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.21/vanta.birds.min.js"></script>
+<script>
+    VANTA.BIRDS({
+        el: "#vanta",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00
+    });
+
+    // Redirect to the login page after 5 seconds
+    setTimeout(function() {
+        window.location.href = "{% url 'login' %}";
+    }, 5000);
+</script>
+
 </body>
 </html>

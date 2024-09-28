@@ -69,9 +69,7 @@ def calculate(request):
             # Handle errors in expression calculation
             result = f"Error calculating {expression}: {str(e)}"
 
-
-
-    return render(request, 'design.html', {'result': result, 'expression': expression,'history': history})
+    return render(request, 'design.html', {'result': result, 'expression': expression,'history': history,'username':user.username})
 
 
 
