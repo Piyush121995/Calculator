@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from rest_framework.exceptions import NotFound
+
 from .import forms
 from calculator.forms import SignupForm
 from rest_framework import generics
@@ -92,10 +94,10 @@ class UserListCreateApiView(generics.ListCreateAPIView):
         serializer.save(password=make_password(serializer.validated_data['password']))
 
 class UserRetrieveUpdateDestroyApiView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    User = User.objects.all()
+    serializer_class = UserSerializer(User,many=True)
     lookup_field = 'id'
-    permission_classes = []
+
 
     def get_object(self):
         id = self.kwargs.get('id')  # get 'username' from the URL
@@ -114,11 +116,12 @@ class HistoryCRUDView(generics.RetrieveUpdateDestroyAPIView):
         return UserCalculationHistory.objects.filter(user_id=user_id).order_by('-Created_at')
 
     def get_object(self):
-        # This method retrieves a single history object for the user
-        queryset = self.get_queryset()
-        obj = queryset.get(id=self.kwargs['id'])  # Get specific entry based on ID
-        return obj
-
+        user_id = self.kwargs.get('user')
+        entry_id = self.kwargs.get('id')
+        try:
+            return UserCalculationHistory.objects.get(user_id=user_id, id=entry_id)
+        except UserCalculationHistory.DoesNotExist:
+            raise NotFound("History entry not found for this user.")
 
 
 #login Functionality

@@ -12,4 +12,4 @@ class UserSerializer(serializers.ModelSerializer):
 class UserCalculationHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model= UserCalculationHistory
-        fields=['user','expression','result','Created_at']
+        fields=['id','user','expression','result','Created_at']
