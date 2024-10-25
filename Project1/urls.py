@@ -24,5 +24,5 @@ urlpatterns = [
 
     path('api/users/history/', HistoryListView.as_view(), name='api_user_history_list_create'),
 
-    path('api/userss/<int:user>/history/<int:id>/',HistoryCRUDView.as_view(), name='api_user_history_CRUD')
+    path('api/users/<int:user>/history/<int:id>/',HistoryCRUDView.as_view(), name='api_user_history_CRUD')
 ]

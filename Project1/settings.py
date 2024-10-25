@@ -29,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9o0@@izc2!ur)fle4715s4h*mvcxouihj0w8e)o3b=48@ljn%g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['192.168.1.4','127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.4','127.0.0.1','10.0.2.2','piyush121995.pythonanywhere.com']
 
 
 # Application definition
@@ -44,10 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'calculator.apps.CalculatorConfig',
+    'corsheaders',
     'rest_framework',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'calculator.middleware.NoCacheMiddleware',
+
 ]
 
 ROOT_URLCONF = 'Project1.urls'
@@ -136,6 +140,8 @@ STATIC_DIR,
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS = True
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
